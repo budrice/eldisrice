@@ -1,0 +1,11 @@
+{
+  "dbServerIP": "127.0.0.1",
+  "connectionLimit": 10,
+  "connectTimeout": 20000,
+  "multipleStatements": true,
+  "dbUser": "eldis",
+  "dbPass": "Xysst100$",
+  "hostname": "http://localhost:3306",
+  "db": "eldis-resume",
+  "passphrase": "Xysst100$"
+}
