@@ -1,10 +1,30 @@
 const http = require("http")
 const app = require("./app.js")
-
+const cluster = require("cluster")
 const port = 3005
-const server = http.createServer(app).listen(port)
-server.on("error", onError)
-server.on("listening", onListening)
+
+// get cpu count
+const numberOfCPUs = require("os").cpus().length
+let cpus = numberOfCPUs
+if (process.argv[2] === 0 || process.argv[2] === undefined) {
+  cpus = numberOfCPUs
+} else if (process.argv[2] < 0 && process.argv[2] !== undefined) {
+  cpus = 1
+} else if (process.argv[2] > numberOfCPUs) {
+  cpus = numberOfCPUs
+} else {
+  cpus = process.argv[2]
+}
+
+if (cluster.isWorker) {
+  var server = http.createServer(app).listen(port)
+  server.on("error", onError)
+  server.on("listening", onListening)
+} else {
+  for (let i = 0; i < cpus; i++) {
+    cluster.fork()
+  }
+}
 
 function onError(error) {
   if (error.syscall !== "listen") {
@@ -28,5 +48,5 @@ function onError(error) {
 function onListening() {
   let addr = server.address()
   let bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port
-  console.log("www.js Listening on " + bind)
+  console.log("server listening on " + bind)
 }

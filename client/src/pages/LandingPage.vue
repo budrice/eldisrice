@@ -1,7 +1,6 @@
 <template>
   <div v-if="viewContent">
-    <NavigationBar :name="fullname" :slides="slides" :video="video" />
-    <b-container>
+    <b-container id="landing-page">
       <Home :content="home" />
       <hr class="m-0" />
       <Experiences :content="experiences" />
@@ -11,13 +10,13 @@
       <Skills :content="skills" />
       <hr class="m-0" />
       <About :content="about" />
+      <hr class="m-0" />
     </b-container>
   </div>
 </template>
 
 <script>
 import { fetchData } from "@/api"
-import NavigationBar from "@/components/NavigationBar"
 import Home from "@/components/Home"
 import Experiences from "@/components/Experiences"
 import Education from "@/components/Education"
@@ -27,7 +26,6 @@ import About from "@/components/About"
 export default {
   name: "LandingPage",
   components: {
-    NavigationBar,
     Home,
     Experiences,
     Education,
@@ -43,16 +41,7 @@ export default {
       education: [],
       skills: {},
       about: {},
-      all_icons: [],
-      slides: []
-    }
-  },
-  computed: {
-    fullname() {
-      return `${this.home.firstname} ${this.home.lastname}`
-    },
-    video() {
-      return this.home.video
+      all_icons: []
     }
   },
   methods: {
@@ -68,13 +57,20 @@ export default {
       })
     }
   },
-  beforeCreate() {
-    fetchData().then(
-      res => {
-        this.results = res
-      },
-      err => console.log(err)
-    )
+  mounted() {
+    try {
+      fetchData().then(
+        res => {
+          this.results = res
+          this.viewContent = true
+        },
+        err => {
+          console.log(err)
+        }
+      )
+    } catch (error) {
+      console.log(error)
+    }
   },
   watch: {
     results() {
@@ -84,7 +80,6 @@ export default {
       this.skills = { ...this.results.data[3][0] }
       this.about = { ...this.results.data[4][0] }
       this.all_icons = this.results.data[5]
-      this.slides = this.results.data[6]
       this.viewContent = true
       this.getPageIcons()
     }
@@ -92,4 +87,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+article {
+  text-indent: 2em;
+}
+.sec {
+  padding: 0 15px;
+}
+</style>

@@ -1,12 +1,7 @@
 <template>
-  <section
-    class="resume-section p-3 p-lg-5 d-flex align-items-center"
-    id="about"
-  >
-    <div class="w-100 mt-5">
-      <h2 class="mb-5">About</h2>
-      <p v-html="content.html"></p>
-    </div>
+  <section id="about">
+    <h1 class="mb-3">About</h1>
+    <article class="mb-5"><div v-html="content.html"></div></article>
   </section>
 </template>
 
@@ -22,8 +17,9 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 section#about {
   min-height: 100vh;
+  padding: 95px 15px;
 }
 </style>

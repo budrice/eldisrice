@@ -7,6 +7,7 @@
 
 <script>
 import NavigationBar from "@/components/NavigationBar"
+
 export default {
   name: "Admin",
   components: {
@@ -14,5 +15,3 @@ export default {
   }
 }
 </script>
-
-<style></style>

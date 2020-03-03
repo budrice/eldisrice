@@ -16,7 +16,9 @@ db.on("error", error => {
 
 module.exports = function() {
   return {
-    GetResumeContent: getResumeContent
+    GetResumeContent: getResumeContent,
+    GetHeaderContent: getHeaderContent,
+    PostMessage: postMessage
   }
 
   function getResumeContent() {
@@ -32,7 +34,27 @@ module.exports = function() {
          \
          SELECT * FROM `eldis-resume`.about; \
          \
-         SELECT * FROM `eldis-resume`.icons; \
+         SELECT * FROM `eldis-resume`.icons;"
+      try {
+        db.query(sql, (error, result) => {
+          if (error) {
+            console.log(error)
+            reject(error)
+          } else {
+            resolve(result)
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        reject(error)
+      }
+    })
+  }
+
+  function getHeaderContent() {
+    return new Promise((resolve, reject) => {
+      const sql =
+        "SELECT firstname, lastname, video FROM `eldis-resume`.home; \
          \
         SELECT * FROM `eldis-resume`.slider;"
       try {
@@ -46,6 +68,24 @@ module.exports = function() {
         })
       } catch (error) {
         console.log(error)
+        reject(error)
+      }
+    })
+  }
+
+  function postMessage(message) {
+    return new Promise((resolve, reject) => {
+      let sql = "INSERT INTO `eldis-resume`.messages SET ?"
+      try {
+        db.query(sql, [message], (error, result) => {
+          if (error) {
+            console.log(error)
+            reject(error)
+          } else {
+            resolve(result)
+          }
+        })
+      } catch (error) {
         reject(error)
       }
     })

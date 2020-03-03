@@ -1,25 +1,18 @@
 <template>
-  <section
-    class="resume-section p-3 p-lg-5 d-flex justify-content-center"
-    id="experiences"
-  >
-    <div class="w-100 mt-5">
-      <h2 class="mb-5">Experience</h2>
-      <div
-        v-for="exp in content"
-        :key="exp.id"
-        class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5"
-      >
-        <div class="resume-content">
-          <h3 class="mb-0">{{ exp.title }}</h3>
-          <div class="subheading mb-3">{{ exp.employer }}</div>
-          <p v-html="exp.html"></p>
-        </div>
-        <div class="resume-date text-md-right">
-          <span class="text-primary">{{ exp.duration }}</span>
-        </div>
-      </div>
-    </div>
+  <section id="experiences">
+    <h1 class="mb-3">Experience</h1>
+    <b-row v-for="exp in content" :key="exp.id" class="sec mb-3">
+      <b-row class="w-100">
+        <b-col cols="12" md="6">
+          <h3 class="mb-3">{{ exp.title }}</h3>
+          <h5>{{ exp.employer }}</h5>
+        </b-col>
+        <b-col cols="12" md="6" class="text-md-right">
+          <h5 style="color: orange;">{{ exp.duration }}</h5>
+        </b-col>
+      </b-row>
+      <article><div v-html="exp.html"></div></article>
+    </b-row>
   </section>
 </template>
 
@@ -35,8 +28,8 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 section#experiences {
-  min-height: 100vh;
+  padding: 95px 15px;
 }
 </style>

@@ -1,32 +1,32 @@
 <template>
-  <section :class="section_class" id="home">
+  <section class="p-3" id="home">
     <div class="w-100 inside-container">
       <h1 class="mb-0">
-        {{ content.firstname }}
-        <span class="text-primary">{{ content.lastname }}</span>
+        <span class="shade orange">{{ content.firstname }}</span
+        >&nbsp;
+        <span class="shade text-primary">{{ content.lastname }}</span>
       </h1>
-
       <h4>{{ content.title }}</h4>
-
       <div class="subheading">
-        <span class="email">+</span>&nbsp;{{ content.subheading }}<br />
-
+        <span class="shade orange"><i class="fas fa-home"></i></span>&nbsp;{{
+          content.subheading
+        }}<br />
         <a :href="`tel:${content.tel}`"
-          ><span class="tel">'</span>&nbsp;<strong>{{ content.tel }}</strong></a
+          ><span class="shade orange"><i class="fas fa-phone-alt"></i></span
+          >&nbsp;<strong>{{ content.tel }}</strong></a
         ><br />
-
         <a :href="`mailto:${content.email}`"
-          ><span class="email">:</span>&nbsp;{{ content.email }}</a
+          ><span class="shade orange"><i class="fas fa-envelope"></i></span
+          >&nbsp;{{ content.email }}</a
         >
       </div>
-
       <div v-html="content.html"></div>
-      <div class="home-icons">
+      <div class="home-icons mb-5">
         <a
           v-for="(icon, i) in content.icons"
           :key="i"
           :href="icon.href"
-          class="mr-3"
+          class="shade mr-3"
           target="_blank"
         >
           <i :class="icon.class"></i>
@@ -50,57 +50,44 @@ export default {
   },
   data() {
     return {
-      section_class: "down resume-section p-3 d-flex align-items-center"
-    }
-  },
-  watch: {
-    positions: {
-      handler(val) {
-        if (val[1] < 101)
-          this.section_class =
-            "down resume-section p-3 d-flex align-items-center"
-        else this.section_class = "resume-section p-3 d-flex align-items-center"
-      }
+      section_class: "p-3"
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
-.down {
-  margin-top: 150px !important;
-}
-.email {
-  font-family: "wingdings";
-  font-size: 1.5em;
-  font-weight: 600;
-  color: rgb(0, 123, 255);
-}
-.tel {
-  font-family: "wingdings 2";
-  font-size: 1.5em;
-  font-weight: 600;
-  color: rgb(0, 123, 255);
-}
-.flower {
-  font-family: wingdings;
-  font-size: 1.5em;
-  font-weight: 600;
-  color: rgb(255, 0, 0);
-  text-shadow: 1px 1px 1px rgb(0, 255, 0);
-}
-section#home {
-  min-height: 100vh;
-}
+// style variables
+$orange: rgb(255, 180, 0);
+$t-shade: 3px 3px 4px rgba(0, 0, 0, 0.5);
+$t-up-shade: 4px 4px 6px rgba(50, 50, 50, 0.45);
+$primary-blue: rgb(0, 123, 255);
+
+// style classes
 .inside-container {
-  margin-top: 100px;
+  margin-top: 515px;
 }
-.home-icons {
+.shade {
+  text-shadow: $t-shade;
+}
+.home-icons,
+.home-icons a i {
   font-size: 48px;
-}
-@media only screen and (max-width: 768px) {
-  .inside-container {
-    margin-top: 280px;
+  color: $primary-blue !important;
+  text-shadow: $t-shade;
+  &.visited {
+    font-size: 48px;
+    color: $primary-blue !important;
+    text-shadow: $t-shade;
   }
+  &:hover {
+    font-size: 52px;
+    color: $orange !important;
+    margin: -4px -4px 0 0;
+    text-shadow: $t-up-shade;
+  }
+}
+.orange {
+  color: $orange !important;
 }
 </style>

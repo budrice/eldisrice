@@ -1,13 +1,9 @@
 <template>
-  <section
-    class="resume-section p-3 p-lg-5 d-flex align-items-center"
-    id="skills"
-  >
-    <div class="w-100 mt-5">
-      <h2 class="mb-5">Skills</h2>
-      <div class="subheading mb-3">{{ content.subheading }}</div>
-      <p v-html="content.html" class="lead mb-5"></p>
-    </div>
+  <section id="skills">
+    <h1 class="mb-3">Skills</h1>
+    <div class="mb-3">{{ content.subheading }}</div>
+    <article class="mb-5"><div v-html="content.html"></div></article>
+    <p></p>
   </section>
 </template>
 
@@ -25,7 +21,7 @@ export default {
 
 <style scoped>
 section#skills {
-  min-height: 100vh;
+  padding: 95px 15px;
 }
 .icon-text {
   font-size: 0.8em;

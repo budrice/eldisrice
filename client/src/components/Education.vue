@@ -1,23 +1,27 @@
 <template>
-  <section id="education" :class="section_class">
-    <div class="w-100 mt-5">
-      <h2 class="mb-5">Education</h2>
-      <div v-for="ed in content" :key="ed.id" :class="content_class">
-        <div class="resume-content">
-          <h3 class="mb-0">{{ ed.title }}</h3>
-          <div class="subheading mb-3">{{ ed.subheading }}</div>
-          <ul>
-            <li v-for="(icon, i) in ed.icons" :key="i">
-              <i :class="icon.class"></i><span>{{ ` ${icon.name}` }}</span>
-            </li>
-          </ul>
-          <p v-html="ed.html"></p>
-        </div>
-        <div class="resume-date text-md-right">
-          <span class="text-primary">{{ ed.duration }}</span>
-        </div>
-      </div>
-    </div>
+  <section id="education">
+    <h1 class="mb-3">Education</h1>
+    <b-row v-for="ed in content" :key="ed.id" class="sec mb-5">
+      <b-row class="w-100">
+        <b-col cols="12" md="6">
+          <h3 class="mb-3">{{ ed.title }}</h3>
+          <h5 class="mb-3">{{ ed.subheading }}</h5>
+        </b-col>
+        <b-col cols="12" md="6" class="text-md-right">
+          <h5 style="color: orange;">{{ ed.duration }}</h5>
+        </b-col>
+      </b-row>
+      <b-row>
+        <ul>
+          <li v-for="(icon, i) in ed.icons" :key="i">
+            <i :class="icon.class"></i><span>{{ ` ${icon.name}` }}</span>
+          </li>
+        </ul>
+      </b-row>
+      <b-row class="p-0">
+        <div v-html="ed.html"></div>
+      </b-row>
+    </b-row>
   </section>
 </template>
 
@@ -57,7 +61,7 @@ export default {
 
 <style scoped>
 section#education {
-  min-height: 100vh;
+  padding: 95px 15px;
 }
 h4,
 h6 {

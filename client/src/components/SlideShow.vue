@@ -1,31 +1,23 @@
 <template>
   <div>
-    <div v-if="positions[1] < 100">
-      <VideoHeader :video-file="`cubes.mp4`" />
+    <div v-if="positions[1] === 0">
+      <VideoHeader :video-file="video" />
     </div>
     <div
       :class="
-        positions[1] >= 100 ? 'bar-slide-collapse w-100' : 'bar-slide w-100'
+        positions[1] === 0
+          ? 'bar-slide w-100 p-3'
+          : 'bar-slide-collapse w-100 p-3'
       "
     >
-      <h1 :class="headertag.class" class="header-tag">
-        {{ title }}
-      </h1>
-      <b-img
-        id="logo"
-        fluid
-        v-bind="mainProps"
-        :src="require(`@/assets/img/slider/slides/${image || 'img-1.png'}`)"
-        alt=""
-      />
-      <b-img
-        id="head"
-        fluid
-        v-if="index === 2"
-        v-bind="headProps"
-        :src="require(`../assets/img/head.png`)"
-        alt=""
-      />
+      <b-container fluid class="frame">
+        <b-row>
+          <b-col cols="12" md="8" offset-md="2">
+            <h1 class="header-tag">{{ title }}</h1>
+            <h2 class="header-tag-sub">{{ subtitle }}</h2>
+          </b-col>
+        </b-row>
+      </b-container>
     </div>
   </div>
 </template>
@@ -40,15 +32,11 @@ export default {
   props: {
     slides: {
       type: Array,
-      required: false,
-      default: () => {
-        return [
-          {
-            id: 1,
-            imagename: "img-1.png"
-          }
-        ]
-      }
+      required: true
+    },
+    video: {
+      type: String,
+      required: true
     }
   },
   components: {
@@ -56,14 +44,11 @@ export default {
   },
   data() {
     return {
-      index: 0,
+      show: true,
       isRunning: true,
-      image: "",
       title: "",
       subtitle: "",
-      headertag: { class: "right" },
-      mainProps: { width: 450, height: 196, class: "left" },
-      headProps: { width: 200, height: 200, class: "headshot" }
+      mainProps: { width: 400, height: 250, class: "mid" }
     }
   },
   methods: {
@@ -73,64 +58,43 @@ export default {
         p = p.then(
           () =>
             new Promise(resolve => {
-              this.index = i
-              console.log(`CHANGING to slide # ${i + 1}`)
               this.change(this.slides[i]).then(() => {
                 if (i === len - 1) {
-                  if (this.positions[1] < 101) window.scrollTo(0, 101)
                   this.isRunning = false
+                  if (this.positions[1] > 0) {
+                    this.show = false
+                  }
                 }
-                resolve(true)
+                resolve()
               })
             })
         )
       }
     },
     change: function(slide) {
-      this.image = slide.imagename
-      this.title = slide.title
-      this.subtitle = slide.subtitle
-      const moveout = () => {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            this.headertag.class = "mid"
-            this.mainProps.class = "mid"
-          }, 10)
-          setTimeout(() => {
-            this.headProps.class = "headshot-moveout"
-          }, 600)
-          setTimeout(() => {
-            resolve()
-          }, 6000)
-        })
-      }
-      const movein = () => {
-        return new Promise(resolve => {
-          this.headertag.class = "right"
-          this.mainProps.class = "left"
-          this.headProps.class = "headshot"
-          resolve(true)
-        })
-      }
       return new Promise(resolve => {
-        moveout()
-          .then(movein)
-          .then(() => {
-            setTimeout(() => {
-              resolve(true)
-            }, 3000)
-          })
+        this.title = slide.title
+        this.subtitle = slide.subtitle
+        setTimeout(() => {
+          resolve(true)
+        }, 4000)
       })
     }
   },
   watch: {
+    slides: {
+      handler: function(val) {
+        if (val) {
+          this.loop()
+        }
+      }
+    },
     positions: {
       handler: function(val) {
-        if (!this.isRunning && val[1] < 101) {
+        if (!this.isRunning && val[1] === 0) {
           this.isRunning = true
+          this.show = true
           this.loop()
-        } else if (this.isRunning && val[1] >= 101) {
-          console.log("NOT RUNNING")
         }
       }
     }
@@ -142,98 +106,63 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.header-tag {
-  width: 450px;
-  margin-top: 0;
-  text-align: center;
+h1 {
+  font-size: 4.5em;
 }
-.headshot {
-  position: fixed;
-  left: calc(100vw + 2000px);
-  top: 180px;
-  -webkit-transition: all 2s ease;
-  -moz-transition: all 2s ease;
-  -o-transition: all 2s ease;
-  -ms-transition: all 2s ease;
-  transition: all 2s ease;
-  &-moveout {
-    position: fixed;
-    left: calc(100vw - 300px);
-    top: 180px;
-    -webkit-transition: all 2s ease;
-    -moz-transition: all 2s ease;
-    -o-transition: all 2s ease;
-    -ms-transition: all 2s ease;
-    transition: all 2s ease;
+h2 {
+  font-size: 4em;
+}
+h1,
+h2 {
+  font-family: Impact;
+  letter-spacing: 0.2em;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 3px rgb(0, 0, 0);
+}
+.header-tag {
+  width: 100%;
+  text-align: center;
+  &-sub {
+    width: 100%;
+    margin-top: 0;
+    text-align: center;
   }
 }
-.left {
-  margin-left: -1000px;
-  -webkit-transition: all 2s ease;
-  -moz-transition: all 2s ease;
-  -o-transition: all 2s ease;
-  -ms-transition: all 2s ease;
-  transition: all 2s ease;
-}
 .mid {
-  margin-left: calc(50vw - 225px);
-  -webkit-transition: all 2s ease;
-  -moz-transition: all 2s ease;
-  -o-transition: all 2s ease;
-  -ms-transition: all 2s ease;
-  transition: all 2s ease;
-}
-.right {
-  margin-left: calc(100vw + 2000px);
-  -webkit-transition: all 2s ease;
-  -moz-transition: all 2s ease;
-  -o-transition: all 2s ease;
-  -ms-transition: all 2s ease;
-  transition: all 2s ease;
+  display: block;
+  margin-left: calc(50vw - 200px);
 }
 .bar-slide {
   z-index: 9999;
   position: fixed;
   left: 0;
-  top: 20px;
+  top: 0;
   width: 100%;
-  height: 300px;
+  height: 370px;
+  background-color: rgba(0, 123, 255, 0.3);
   &-collapse {
-    z-index: 9999;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 0px;
     display: none;
   }
 }
-@media only screen and (max-width: 768px) {
+.frame {
+  padding: 85px 3px 3px;
+}
+@media only screen and (max-width: 450px) {
   .header-tag {
-    font-size: 24px;
+    width: auto;
+    &-sub {
+      width: auto;
+    }
   }
-  .headshot {
-    height: 120px;
-    width: 120px;
-    position: fixed;
-    left: calc(100vw + 1000px);
-    top: 300px;
-    -webkit-transition: all 2s ease;
-    -moz-transition: all 2s ease;
-    -o-transition: all 2s ease;
-    -ms-transition: all 2s ease;
-    transition: all 2s ease;
-    &-moveout {
-      height: 80px;
-      width: 80px;
-      position: fixed;
-      left: calc(100vw - 100px);
-      top: 300px;
-      -webkit-transition: all 2s ease;
-      -moz-transition: all 2s ease;
-      -o-transition: all 2s ease;
-      -ms-transition: all 2s ease;
-      transition: all 2s ease;
+  .mid {
+    margin: 0;
+  }
+}
+@media only screen and (max-width: 1280px) {
+  .header-tag {
+    font-size: 3em;
+    &-sub {
+      font-size: 2.5em;
     }
   }
 }
