@@ -1,6 +1,9 @@
 .DS_Store
 node_modules
 
+config.json
+secret.js
+
 # local env files
 .env.local
 .env.*.local
