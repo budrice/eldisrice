@@ -4,6 +4,17 @@ const router = express.Router()
 const Db = require("./database/queries.js")
 const db = new Db()
 
+router.post("/login", (req, res) => {
+  db.Login(req.body).then(
+    result => {
+      res.json(result)
+    },
+    error => {
+      res.json(error)
+    }
+  )
+})
+
 router.get("/getresume", (req, res) => {
   db.GetResumeContent(req.body).then(
     result => {
